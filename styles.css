@@ -1,0 +1,38 @@
+.container {
+  border: 3px solid black;
+  border-radius: 10px;
+  padding: 50px;
+  position: relative;
+  font-family: Georgia;
+  font-size: xx-large;
+  text-align: center;
+  font-weight: bold;
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-rows: auto 1fr auto;
+  height: 80vh;
+  width: auto;
+  background-color: #16e2f5;
+  color: #050505;
+}
+img {
+  width: auto;
+  height: 35vh;
+}
+
+p1 {
+  font-size: xx-large;
+  font-weight: bold;
+}
+p2 {
+  font-size: xx-large;
+  font-weight: bold;
+}
+
+footer {
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+  font-size: medium;
+}
