@@ -1,1 +1,1 @@
-const document.getElementById = (.cookie)
+console.log("hello");
