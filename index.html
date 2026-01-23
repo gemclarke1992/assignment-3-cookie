@@ -8,38 +8,39 @@
     <title>Crumbles</title>
   </head>
   <body>
-    // whole game
+    <main>
+    <!-- /whole game -->
     <section class="container">
-      // left side of the game
+<!-- left side -->
       <div class="game-left">
-      <main>
         <h1 >Crumbles</h1>
          <p id="header">Click on the cookie to add more cookies!!! </p>
-        <p>Cookie count</p3>
-       <p id="cookieCount"></p4>
-       <p>CPS</p>
+      
+       <p id="cookieCount"></p>
+      
        <p id="cps"></p>
-// cookie to click on
-       <div id="cookie" onclick="clickCookie()">
+
+       <div id="cookie">
         <img
           src="images/cookie.png"
           alt="Image of a cookie"
         />
-// save reset buttons
         </div>
-        <button id="save" onclick="saveGame()">Save Score</button>
+<!-- /save reset buttons -->
+        <button id="save" onclick="saveGame()">Save</button>
+        <button id="load" onclick="loadGame()">Load</button>
           <button id="reset" onclick="resetGame()">Reset</button>
-      </section>
-//right side of game with upgrades
-      <section>
-        <div id="upgrades">
+          
+          </div>
+<!-- /right side of game with upgrades -->
+      <section class="upgrades-panel">
           <h2>Upgrades</h2>
           <div id="upgrades"></div>
-        </div>
+      </section>
       </main>
+    </section>
       <footer>
         <p>Made by Gemma Clarke &#127765;</p>
       </footer>
-    </section>
   </body>
 </html>

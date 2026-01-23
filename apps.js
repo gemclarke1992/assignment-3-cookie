@@ -1,26 +1,30 @@
 console.log("hello");
 
 let cookieCount = 0;
-let cps = 1;
-let cookie = 1
+let cps = 0;
+let clickPower = 1;
 let autoClickers = 0;
+let autoClickPower = 1;
+let manualClicks = 0;
 
-const cookieCountDislay = document.getElementById("cookieCount");
+const cookieCountDisplay = document.getElementById("cookieCount");
 const cpsDisplay = document.getElementById("cps");
 const img = document.querySelector("img");
 
-cookieCountDislay.innerText = cookieCount;
+cookieCountDisplay.innerText = cookieCount;
 cpsDisplay.innerText = cps;
 
 img.addEventListener("click", function () {
-  cookieCount + 1;
-  cookieCountDislay.innerText = cookieCount;
-}); 
+  cookieCount += clickPower;
+  manualClicks += clickPower;
+  cookieCountDisplay.innerText = cookieCount;
 
-setInterval(function () {
-  cookieCount++;
-}, 1000);
+  const chip = document.querySelector("#cookie img");
+  chip.classList.add("clicked");
+  setTimeout(() => img.classList.remove("clicked"), 150);
 
+  update();
+});
 
 const upgrades = [
   {
@@ -29,7 +33,7 @@ const upgrades = [
     cost: 100,
     increase: 1,
     owned: 0,
-    type: "autp",
+    type: "auto",
   },
   {
     id: 2,
@@ -69,7 +73,7 @@ const upgrades = [
     cost: 10000,
     increase: 100,
     owned: 0,
-    type: "cps",
+    type: "click",
   },
   {
     id: 7,
@@ -77,7 +81,7 @@ const upgrades = [
     cost: 20000,
     increase: 200,
     owned: 0,
-    type: "cps",
+    type: "click",
   },
   {
     id: 8,
@@ -85,7 +89,7 @@ const upgrades = [
     cost: 50000,
     increase: 500,
     owned: 0,
-    type: "cps",
+    type: "click",
   },
   {
     id: 9,
@@ -93,7 +97,7 @@ const upgrades = [
     cost: 100000,
     increase: 1000,
     owned: 0,
-    type: "cps",
+    type: "click",
   },
   {
     id: 10,
@@ -101,37 +105,133 @@ const upgrades = [
     cost: 200000,
     increase: 2000,
     owned: 0,
-    type: "cps",
+    type: "click",
   },
 ];
 
-function upgrades() {
-  return upgrades.reduce((s, u) => s + u.owned, 0);
-}
+update();
 
-function clickCookie() {
-  cookiee += cookieCount 
-  showFloatingText(cookieCount);
+function buyUpgrade(id) {
+  const u = upgrades.find((x) => x.id === id);
+  if (!u || cookieCount < u.cost) return;
 
-  const chip =document.querySelector("clickCookie img");
-  chip.classList.add("clicked", 150)
-
-  update ();
-}
-
-function buyUpgrade (id) {
-  const u = upgrades.find((x) => x.id===id);
-  if (!u || chip < u.cost) return;
-
-  chip-= u.cost
+  cookieCount = cookieCount - u.cost;
   u.owned++;
-  u.cost = Math.floor(u.cost*1.5);
 
-  if (u.type === "cps") cps += u.increase;
-  if (u.type === "click") cookieCount += u.increase;
-  if (u.type === "auto") autoClickers += u.increase;
+  if (u.type === "click") {
+    clickPower += u.increase;
+  } else if (u.type === "auto") {
+    autoClickers += u.increase;
+  } else if (u.type === "cps") {
+    autoClickPower += u.increase;
+  }
 
-  update ();
+  update();
 }
 
-function updateUI 
+function updateUI() {
+  document.getElementById("cookieCount").textContent =
+    `Cookies: ${Math.floor(cookieCount)}`;
+
+  cpsDisplay.textContent = `CPS: ${cps}`;
+}
+
+function renderUpgrades() {
+  const el = document.getElementById("upgrades");
+  el.innerHTML = "";
+
+  upgrades.forEach((u) => {
+    const div = document.createElement("div");
+    div.className = "upgrade";
+
+    div.innerHTML = `
+        <h4>${u.name}</h4>
+        <p>Owned: ${u.owned}</p>
+        <p>Adds: ${u.increase} ${u.type === "click" ? "per click" : "cookies"} </p>
+        <p>Cost: ${u.cost} cookies</p>
+      `;
+    const btn = document.createElement("button");
+    btn.textContent = "Buy";
+    btn.disabled = cookieCount < u.cost;
+    btn.addEventListener("click", () => buyUpgrade(u.id));
+
+    div.appendChild(btn);
+    el.appendChild(div);
+  });
+}
+function saveGame() {
+  localStorage.setItem(
+    "cookieSave",
+    JSON.stringify({
+      cookieCount,
+      cps,
+      clickPower,
+      autoClickers,
+      upgrades: upgrades.map((u) => ({
+        owned: u.owned,
+        cost: u.cost,
+      })),
+    }),
+  );
+}
+function loadGame() {
+  const saved = JSON.parse(localStorage.getItem("cookieSave"));
+  return alert("No save found");
+
+  cookieCount = saved.cookieCount;
+  cps = saved.cps;
+  clickPower = saved.clickPower;
+  autoClickers = saved.autoClickers;
+
+  saved.upgrades.forEach((u, index) => {
+    upgrades[index].owned = u.owned;
+    upgrades[index].cost = u.cost;
+    if (upgrades[index].type === "click")
+      clickPower += upgrades[index].increase * upgrades[index].owned;
+    if (upgrades[index].type === "auto")
+      autoClickers += upgrades[index].increase * upgrades[index].owned;
+  });
+  updateUI();
+  alert("Game loaded");
+}
+
+window.addEventListener("load", () => {
+  if (localStorage.getItem("cookieSave")) loadGame();
+});
+
+function resetGame() {
+  if (!confirm("Are you sure you want to reset?")) return;
+  cookieCount = 0;
+  cps = 0;
+  clickPower = 1;
+  autoClickers = 0;
+  manualClicks = 0;
+
+  upgrades.forEach((u) => {
+    u.owned = 0;
+  });
+  update();
+  localStorage.removeItem("cookieSave");
+}
+
+function update() {
+  updateUI();
+  renderUpgrades();
+  saveGame();
+}
+
+setInterval(() => {
+  if (autoClickers > 0) {
+    const autoCookies = autoClickers * autoClickPower;
+
+    cookieCount += autoCookies;
+    cps = manualClicks + autoCookies;
+  } else {
+    cps = manualClicks;
+  }
+
+  manualClicks = 0;
+  updateUI();
+}, 1000);
+
+update();
