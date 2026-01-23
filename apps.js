@@ -35,6 +35,7 @@ const upgrades = [
     increase: 1,
     owned: 0,
     type: "auto",
+    seen: false,
   },
   {
     id: 2,
@@ -43,6 +44,7 @@ const upgrades = [
     increase: 5,
     owned: 0,
     type: "cps",
+    seen: false,
   },
   {
     id: 3,
@@ -51,6 +53,7 @@ const upgrades = [
     increase: 10,
     owned: 0,
     type: "cps",
+    seen: false,
   },
   {
     id: 4,
@@ -59,6 +62,7 @@ const upgrades = [
     increase: 50,
     owned: 0,
     type: "cps",
+    seen: false,
   },
   {
     id: 5,
@@ -67,6 +71,7 @@ const upgrades = [
     increase: 100,
     owned: 0,
     type: "cps",
+    seen: false,
   },
   {
     id: 6,
@@ -75,6 +80,7 @@ const upgrades = [
     increase: 1000,
     owned: 0,
     type: "click",
+    seen: false,
   },
   {
     id: 7,
@@ -83,6 +89,7 @@ const upgrades = [
     increase: 20000,
     owned: 0,
     type: "click",
+    seen: false,
   },
   {
     id: 8,
@@ -91,6 +98,7 @@ const upgrades = [
     increase: 50000,
     owned: 0,
     type: "click",
+    seen: false,
   },
   {
     id: 9,
@@ -99,6 +107,7 @@ const upgrades = [
     increase: 1000000,
     owned: 0,
     type: "click",
+    seen: false,
   },
   {
     id: 10,
@@ -107,6 +116,7 @@ const upgrades = [
     increase: 2000000,
     owned: 0,
     type: "click",
+    seen: false,
   },
 ];
 
@@ -118,6 +128,7 @@ function buyUpgrade(id) {
 
   cookieCount = cookieCount - u.cost;
   u.owned++;
+  u.seen = true;
 
   if (u.type === "click") {
     clickPower += u.increase;
@@ -142,7 +153,7 @@ function renderUpgrades() {
   el.innerHTML = "";
 
   upgrades.forEach((u) => {
-    if (cookieCount < u.cost) return;
+    if (u.seen && cookieCount < u.cost) return;
 
     const div = document.createElement("div");
     div.className = "upgrade";
