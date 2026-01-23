@@ -142,6 +142,8 @@ function renderUpgrades() {
   el.innerHTML = "";
 
   upgrades.forEach((u) => {
+    if (cookieCount < u.cost) return;
+
     const div = document.createElement("div");
     div.className = "upgrade";
 
