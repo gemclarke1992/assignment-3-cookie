@@ -6,7 +6,6 @@ let clickPower = 1;
 let autoClickers = 0;
 let autoClickPower = 1;
 let manualClicks = 0;
-
 let hasSaved = false;
 
 const cookieCountDisplay = document.getElementById("cookieCount");
@@ -177,7 +176,10 @@ function saveGame() {
       })),
     }),
   );
+
+  clearInterval(interValid);
   hasSaved = true;
+  alert("Game saved! Autoclicker paused");
 }
 function loadGame() {
   const saved = JSON.parse(localStorage.getItem("cookieSave"));
@@ -203,6 +205,7 @@ function loadGame() {
   });
   updateUI();
   alert("Game loaded");
+  interValid = startAutoClickers();
 }
 
 window.addEventListener("load", () => {
@@ -233,13 +236,31 @@ function update() {
   renderUpgrades();
 }
 
-setInterval(() => {
-  cookieCount += autoClickers * autoClickPower;
+function startAutoClickers() {
+  return setInterval(() => {
+    for (let i = 0; i < autoClickers; i++) {
+      cookieCount += clickPower;
+      manualClicks += clickPower;
 
-  cps = manualClicks + autoClickers * autoClickPower;
+      const chip = document.querySelector("#cookie img");
+      chip.classList.add("clicked");
+      setTimeout(() => chip.classList.remove("clicked"));
+    }
+    cps = manualClicks + autoClickers * autoClickPower;
+    manualClicks = 0;
 
-  manualClicks = 0;
-  update();
-}, 1000);
+    update();
+  }, 1000);
+}
+let interValid = startAutoClickers();
+// setInterval(() => {
+
+//   cookieCount += autoClickers * autoClickPower;
+
+//   cps = manualClicks + autoClickers * autoClickPower;
+
+//   manualClicks = 0;
+//   update();
+// }, 1000);
 
 update();
