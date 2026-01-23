@@ -7,6 +7,8 @@ let autoClickers = 0;
 let autoClickPower = 1;
 let manualClicks = 0;
 
+let hasSaved = false;
+
 const cookieCountDisplay = document.getElementById("cookieCount");
 const cpsDisplay = document.getElementById("cps");
 const img = document.querySelector("img");
@@ -38,7 +40,7 @@ const upgrades = [
   {
     id: 2,
     name: "Cookie Crumbler",
-    cost: 500,
+    cost: 200,
     increase: 5,
     owned: 0,
     type: "cps",
@@ -46,7 +48,7 @@ const upgrades = [
   {
     id: 3,
     name: "Crumbly Cookie",
-    cost: 1000,
+    cost: 500,
     increase: 10,
     owned: 0,
     type: "cps",
@@ -54,16 +56,16 @@ const upgrades = [
   {
     id: 4,
     name: "Double Chocolate Chip",
-    cost: 2000,
-    increase: 20,
+    cost: 1000,
+    increase: 50,
     owned: 0,
     type: "cps",
   },
   {
     id: 5,
     name: "Big Dipper Cookie",
-    cost: 5000,
-    increase: 50,
+    cost: 3000,
+    increase: 100,
     owned: 0,
     type: "cps",
   },
@@ -71,7 +73,7 @@ const upgrades = [
     id: 6,
     name: "Magic Chips",
     cost: 10000,
-    increase: 100,
+    increase: 1000,
     owned: 0,
     type: "click",
   },
@@ -79,7 +81,7 @@ const upgrades = [
     id: 7,
     name: "Chunky Cookie",
     cost: 20000,
-    increase: 200,
+    increase: 20000,
     owned: 0,
     type: "click",
   },
@@ -87,7 +89,7 @@ const upgrades = [
     id: 8,
     name: "Mega Cookie",
     cost: 50000,
-    increase: 500,
+    increase: 50000,
     owned: 0,
     type: "click",
   },
@@ -95,7 +97,7 @@ const upgrades = [
     id: 9,
     name: "Thats the way the cookie Crumbles",
     cost: 100000,
-    increase: 1000,
+    increase: 1000000,
     owned: 0,
     type: "click",
   },
@@ -103,7 +105,7 @@ const upgrades = [
     id: 10,
     name: "Infinity Cookie ",
     cost: 200000,
-    increase: 2000,
+    increase: 2000000,
     owned: 0,
     type: "click",
   },
@@ -167,21 +169,29 @@ function saveGame() {
       cps,
       clickPower,
       autoClickers,
+      autoClickPower,
+
       upgrades: upgrades.map((u) => ({
         owned: u.owned,
         cost: u.cost,
       })),
     }),
   );
+  hasSaved = true;
 }
 function loadGame() {
   const saved = JSON.parse(localStorage.getItem("cookieSave"));
-  return alert("No save found");
+  if (!saved) {
+    alert("No save found");
+    return;
+  }
 
   cookieCount = saved.cookieCount;
   cps = saved.cps;
   clickPower = saved.clickPower;
   autoClickers = saved.autoClickers;
+  autoClickPower = saved.autoClickPower ?? 1;
+  autoClickSpeed = saved.autoClickSpeed ?? 1;
 
   saved.upgrades.forEach((u, index) => {
     upgrades[index].owned = u.owned;
@@ -196,7 +206,11 @@ function loadGame() {
 }
 
 window.addEventListener("load", () => {
-  if (localStorage.getItem("cookieSave")) loadGame();
+  if (localStorage.getItem("cookieSave") && hasSaved) {
+    if (confirm("Load saved game?")) {
+      loadGame();
+    }
+  }
 });
 
 function resetGame() {
@@ -217,21 +231,15 @@ function resetGame() {
 function update() {
   updateUI();
   renderUpgrades();
-  saveGame();
 }
 
 setInterval(() => {
-  if (autoClickers > 0) {
-    const autoCookies = autoClickers * autoClickPower;
+  cookieCount += autoClickers * autoClickPower;
 
-    cookieCount += autoCookies;
-    cps = manualClicks + autoCookies;
-  } else {
-    cps = manualClicks;
-  }
+  cps = manualClicks + autoClickers * autoClickPower;
 
   manualClicks = 0;
-  updateUI();
+  update();
 }, 1000);
 
 update();

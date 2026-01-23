@@ -9,38 +9,30 @@
   </head>
   <body>
     <main>
-    <!-- /whole game -->
-    <section class="container">
-<!-- left side -->
-      <div class="game-left">
-        <h1 >Crumbles</h1>
-         <p id="header">Click on the cookie to add more cookies!!! </p>
-      
-       <p id="cookieCount"></p>
-      
-       <p id="cps"></p>
-
-       <div id="cookie">
-        <img
-          src="images/cookie.png"
-          alt="Image of a cookie"
-        />
-        </div>
-<!-- /save reset buttons -->
-        <button id="save" onclick="saveGame()">Save</button>
-        <button id="load" onclick="loadGame()">Load</button>
-          <button id="reset" onclick="resetGame()">Reset</button>
-          
+      <!-- /whole game -->
+      <div class="container">
+        <!-- left side -->
+        <div class="game-left">
+          <h1>Crumbles</h1>
+          <p id="header">Click on the cookie to add more cookies!!!</p>
+          <div id="cookie">
+            <img src="images/cookie.png" alt="Image of a cookie" />
+            <p id="cookieCount"></p>
+            <p id="cps"></p>
           </div>
-<!-- /right side of game with upgrades -->
-      <section class="upgrades-panel">
-          <h2>Upgrades</h2>
-          <div id="upgrades"></div>
-      </section>
-      </main>
-    </section>
-      <footer>
-        <p>Made by Gemma Clarke &#127765;</p>
-      </footer>
+          <button id="save" onclick="saveGame()">Save</button>
+          <button id="load" onclick="loadGame()">Load</button>
+          <button id="reset" onclick="resetGame()">Reset</button>
+        </div>
+      </div>
+
+      <div class="upgrades-panel">
+        <h2>Upgrades</h2>
+        <div id="upgrades"></div>
+      </div>
+    </main>
+    <footer>
+      <p>Made by Gemma Clarke &#127765;</p>
+    </footer>
   </body>
 </html>

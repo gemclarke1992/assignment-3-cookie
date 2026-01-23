@@ -21,6 +21,13 @@
   align-items: center;
   overflow-y: auto;
 }
+.buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
 
 .upgrades-panel {
   display: flex;
@@ -41,6 +48,7 @@
   padding: 0.5rem;
   border-radius: 6px;
   font-size: 0.9rem;
+  cursor: pointer;
 }
 
 img {
@@ -50,4 +58,19 @@ img {
 footer {
   text-align: center;
   font-size: medium;
+}
+
+@media (max-width: 600px) {
+  .container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+  }
+  .upgrades-panel {
+    border-left: none;
+    border-top: 2px solid black;
+    width: 100%;
+  }
+  .game-left {
+    max-height: 50vh;
+  }
 }
